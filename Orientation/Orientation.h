@@ -1,7 +1,7 @@
 #ifndef ORIENTATION_H
 #define ORIENTATION_H
 
-#include "Quaternion.h"
+#include "../Quaternion/Quaternion.h"
 
 struct EulerAngles
 {

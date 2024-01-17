@@ -1,6 +1,5 @@
-#include "Quaternion.h"
-#include "Arduino.h"
-
+#include "../Quaternion/Quaternion.h"
+#include <math.h>
 // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/arithmetic/index.htm
 // 800B
 Quaternion & Quaternion::operator*=(const Quaternion &q) {

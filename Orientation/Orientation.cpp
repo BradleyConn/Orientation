@@ -1,6 +1,7 @@
-#include "Orientation.h"
-#include "Quaternion.h"
-#include "Arduino.h"
+#include "../Orientation/Orientation.h"
+#include "../Quaternion/Quaternion.h"
+#include <math.h>
+#include <algorithm>
 
 Quaternion expectedGravity(1, 0, 0);
 
@@ -14,7 +15,7 @@ EulerAngles Orientation::quaternionToEuler(Quaternion q)
 
     float sinp = 2 * (q.a * q.c + -q.d * q.b);
     if (abs(sinp) >= 1)
-        ret.pitch = copysign(PI / 2, sinp); // return 90 if out of range
+        ret.pitch = copysign(M_PI / 2, sinp); // return 90 if out of range
     else
         ret.pitch = asin(sinp);
 
@@ -28,14 +29,14 @@ EulerAngles Orientation::quaternionToEuler(Quaternion q)
 void Orientation::update(float yaw, float pitch, float roll, float dt)
 {
     float norm = sqrtf(powf(yaw, 2) + powf(pitch, 2) + powf(roll, 2));
-    norm = copysignf(max(abs(norm), 1e-9), norm); // NO DIVIDE BY 0
+    norm = copysignf(std::max(abs(norm), (float)1e-9), norm); // NO DIVIDE BY 0
 
     orientation *= Quaternion::from_axis_angle(dt * norm, roll / norm, pitch / norm, yaw / norm);
 }
 void Orientation::update(EulerAngles gyroMeasure, float dt)
 {
     float norm = sqrtf(powf(gyroMeasure.yaw, 2) + powf(gyroMeasure.pitch, 2) + powf(gyroMeasure.roll, 2));
-    norm = copysignf(max(abs(norm), 1e-9), norm); // NO DIVIDE BY 0
+    norm = copysignf(std::max(abs(norm), (float)1e-9), norm); // NO DIVIDE BY 0
 
     orientation *= Quaternion::from_axis_angle(dt * norm, gyroMeasure.roll / norm, gyroMeasure.pitch / norm, gyroMeasure.yaw / norm);
 }
